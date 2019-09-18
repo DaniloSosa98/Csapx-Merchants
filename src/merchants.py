@@ -12,7 +12,6 @@ Author: Danilo Sosa
 """
 
 import collections      # namedtuple
-from typing import List
 from typing import Tuple
 import sys              # arg
 import time             # clock
@@ -62,15 +61,26 @@ def main() -> None:
     The main function.
     :return: None
     """
-    merchants = read_merchant("./data/test-10.txt")
-    sorted_merchants = quick_sort(merchants)
-    for merchant in sorted_merchants:
-        print(merchant)
-    
-    median = len(merchants)//2
-    print('\n')
+    merchants = read_merchant("./data/test-1M.txt")
 
-    print(sorted_merchants[median])
+    search_type = input('Insert the search type: ')
+    if search_type[0] == 's':
+        t_start = time.perf_counter()
+        sorted_merchants = quick_sort(merchants)
+
+        median = len(merchants)//2
+        t_stop = time.perf_counter()
+        elapsedT = t_stop - t_start
+        print('\n')
+
+    else:
+        pass
+    
+    print('Search type:', search_type)
+    print('Number of merchants:', len(sorted_merchants))
+    print('Elapsed time:', elapsedT)
+    print('Optimal store location:', sorted_merchants[median])
+    print('Sum of the distances:')
 
 if __name__ == '__main__':
     main()
