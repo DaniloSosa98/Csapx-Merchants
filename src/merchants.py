@@ -40,10 +40,10 @@ def quick_sort(data: List[Merchant]) -> List[Merchant]:
         return []
     else:
         pivot = data[0]
-        less, equal, greater = _partition(data, pivot)
+        less, equal, greater = Spartition(data, pivot)
         return quick_sort(less) + equal + quick_sort(greater)
 
-def _partition(data: List[Merchant], pivot: Merchant) \
+def Spartition(data: List[Merchant], pivot: Merchant) \
       -> Tuple[List[Merchant], List[Merchant], List[Merchant]]:
     
     less, equal, greater = [], [], []
@@ -56,6 +56,35 @@ def _partition(data: List[Merchant], pivot: Merchant) \
             equal.append(element)
     return less, equal, greater
 
+def quick_select(data: List[Merchant], less, greater, k):
+        index = rand_pivot(data, less, greater)
+        if (index - less == k - 1):
+            return data[index]
+        elif (index - less > k - 1):
+            return quick_select(data, less, index - 1, k)
+        else:
+            return quick_select(data, index + 1, greater, k - index + less - 1) 
+
+def Fpartition(data: List[Merchant], less, greater): 
+    x = data[greater].location 
+    i = less 
+    for j in range(less, greater): 
+        if (data[j].location <= x): 
+            switch(data, i, j) 
+            i += 1
+    switch(data, i, greater) 
+    return i
+
+def rand_pivot(data: List[Merchant], less, greater): 
+    pivot = random.randrange(greater - less + 1)
+    switch(data, less + pivot, greater) 
+    return Fpartition(data, less, greater)
+
+def switch(data: List[Merchant], a, b):
+    temp = data[a] 
+    data[a] = data[b] 
+    data[b] = temp
+
 def main() -> None:
     """
     The main function.
@@ -64,23 +93,36 @@ def main() -> None:
     merchants = read_merchant("./data/test-1M.txt")
 
     search_type = input('Insert the search type: ')
-    if search_type[0] == 's':
-        t_start = time.perf_counter()
-        sorted_merchants = quick_sort(merchants)
 
+    if search_type[0] == 'f':
         median = len(merchants)//2
-        t_stop = time.perf_counter()
-        elapsedT = t_stop - t_start
-        print('\n')
+
+        t_start = time.perf_counter()
+        quick_select(merchants, 0, len(merchants) - 1, median+1)
+        elapsedT = time.perf_counter() - t_start
+
+        print(merchants[median])
+        print('Search type:', search_type)
+        print('Number of merchants:', len(merchants))
+        print('Elapsed time:', elapsedT)
+        print('Optimal store location:', merchants[median])
+        print('Sum of the distances:')
 
     else:
-        pass
-    
-    print('Search type:', search_type)
-    print('Number of merchants:', len(sorted_merchants))
-    print('Elapsed time:', elapsedT)
-    print('Optimal store location:', sorted_merchants[median])
-    print('Sum of the distances:')
+
+        t_start = time.perf_counter()
+
+        sorted_merchants = quick_sort(merchants)
+
+        elapsedT = time.perf_counter() - t_start
+
+        median = len(merchants)//2
+
+        print('Search type:', search_type)
+        print('Number of merchants:', len(merchants))
+        print('Elapsed time:', elapsedT)
+        print('Optimal store location:', sorted_merchants[median])
+        print('Sum of the distances:')
 
 if __name__ == '__main__':
     main()
