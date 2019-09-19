@@ -24,6 +24,8 @@ Merchant = collections.namedtuple( 'Merchant',
 
 def read_merchant( filename: str ) -> List[ Merchant ]:
 
+#Function that serves to read the .txt file and add
+#each merchant with its corresponding name and location
     merchants = list( )
     with open( filename ) as f:
         for line in f:
@@ -35,7 +37,8 @@ def read_merchant( filename: str ) -> List[ Merchant ]:
     return merchants
 
 def quick_sort(data: List[Merchant]) -> List[Merchant]:
-    
+#Recursive function that keeps calling itself with the subarrays 
+#as arguments with the pivot being the first index from left to right
     if len(data) == 0:
         return []
     else:
@@ -45,7 +48,9 @@ def quick_sort(data: List[Merchant]) -> List[Merchant]:
 
 def Spartition(data: List[Merchant], pivot: Merchant) \
       -> Tuple[List[Merchant], List[Merchant], List[Merchant]]:
-    
+#The partition function for the quick sort, it inserts the values
+#in their corresponding subarrays depending if they are less, greater
+#or equal to the pivot
     less, equal, greater = [], [], []
     for element in data:
         if element.location < pivot.location:
@@ -57,6 +62,10 @@ def Spartition(data: List[Merchant], pivot: Merchant) \
     return less, equal, greater
 
 def quick_select(data: List[Merchant], less, greater, k):
+#Recursive function that calls itslef wiht different ranges
+#from the original list instead of subarrays, these ranges are determined
+#with the value of the random pivot compared to the k value
+
         index = rand_pivot(data, less, greater)
         if (index - less == k - 1):
             return data[index]
@@ -65,7 +74,10 @@ def quick_select(data: List[Merchant], less, greater, k):
         else:
             return quick_select(data, index + 1, greater, k - index + less - 1) 
 
-def Fpartition(data: List[Merchant], less, greater): 
+def Fpartition(data: List[Merchant], less, greater):
+#Partition for the quick select method it sorts the array by
+#comparing the values inside tha list and switching values to
+#fix the ranges (less, greater)
     x = data[greater].location 
     i = less 
     for j in range(less, greater): 
@@ -75,24 +87,22 @@ def Fpartition(data: List[Merchant], less, greater):
     switch(data, i, greater) 
     return i
 
-def rand_pivot(data: List[Merchant], less, greater): 
+def rand_pivot(data: List[Merchant], less, greater):
+#Function to select the random pivot within the range of the List
     pivot = random.randrange(greater - less + 1)
     switch(data, less + pivot, greater) 
     return Fpartition(data, less, greater)
 
 def switch(data: List[Merchant], a, b):
+#Function that serves to switch values within the List
     temp = data[a] 
     data[a] = data[b] 
     data[b] = temp
 
 def main() -> None:
-    """
-    The main function.
-    :return: None
-    """
     merchants = read_merchant("./data/test-1M.txt")
 
-    search_type = input('Insert the search type: ')
+    search_type = input('Insert the search type [slow|fast]: ')
 
     if search_type[0] == 'f':
         median = len(merchants)//2
@@ -105,7 +115,6 @@ def main() -> None:
         print('Number of merchants:', len(merchants))
         print('Elapsed time:', elapsedT)
         print('Optimal store location:', merchants[median])
-        print('Sum of the distances:')
 
     else:
 
@@ -121,7 +130,6 @@ def main() -> None:
         print('Number of merchants:', len(merchants))
         print('Elapsed time:', elapsedT)
         print('Optimal store location:', sorted_merchants[median])
-        print('Sum of the distances:')
 
 if __name__ == '__main__':
     main()
