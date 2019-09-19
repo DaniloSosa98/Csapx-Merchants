@@ -100,8 +100,7 @@ def main() -> None:
         t_start = time.perf_counter()
         quick_select(merchants, 0, len(merchants) - 1, median+1)
         elapsedT = time.perf_counter() - t_start
-
-        print(merchants[median])
+    
         print('Search type:', search_type)
         print('Number of merchants:', len(merchants))
         print('Elapsed time:', elapsedT)
