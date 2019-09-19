@@ -100,24 +100,10 @@ def switch(data: List[Merchant], a, b):
     data[b] = temp
 
 def main() -> None:
-    merchants = read_merchant("./data/test-1M.txt")
-
-    search_type = input('Insert the search type [slow|fast]: ')
-
-    if search_type[0] == 'f':
-        median = len(merchants)//2
-
-        t_start = time.perf_counter()
-        quick_select(merchants, 0, len(merchants) - 1, median+1)
-        elapsedT = time.perf_counter() - t_start
     
-        print('Search type:', search_type)
-        print('Number of merchants:', len(merchants))
-        print('Elapsed time:', elapsedT)
-        print('Optimal store location:', merchants[median])
+    merchants = read_merchant(sys.argv[2])
 
-    else:
-
+    if sys.argv[1] == 'slow':
         t_start = time.perf_counter()
 
         sorted_merchants = quick_sort(merchants)
@@ -126,10 +112,22 @@ def main() -> None:
 
         median = len(merchants)//2
 
-        print('Search type:', search_type)
+        print('Search type: slow')
         print('Number of merchants:', len(merchants))
         print('Elapsed time:', elapsedT)
         print('Optimal store location:', sorted_merchants[median])
+
+    else:
+        median = len(merchants)//2
+
+        t_start = time.perf_counter()
+        quick_select(merchants, 0, len(merchants) - 1, median+1)
+        elapsedT = time.perf_counter() - t_start
+    
+        print('Search type: fast')
+        print('Number of merchants:', len(merchants))
+        print('Elapsed time:', elapsedT)
+        print('Optimal store location:', merchants[median])
 
 if __name__ == '__main__':
     main()
